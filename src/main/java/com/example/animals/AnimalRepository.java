@@ -14,6 +14,5 @@ public interface AnimalRepository  extends JpaRepository<Animal, Integer> {
 
     List<Animal> getAnimalsBySpecies(String species);
 
-    @Query(value = "select * from animals with name containing substring", nativeQuery = true)
-    List<Animal> getAnimalByName(String substring);
+    List<Animal> getAnimalsContainingName(String substring);
 }

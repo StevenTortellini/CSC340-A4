@@ -2,16 +2,22 @@ package com.example.animals;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 
-import java.util.List;
 
-@RestController
+
+@Controller
 @RequestMapping("/animals")
 public class AnimalsController {
 
     @Autowired
     private AnimalsService service;
 
+    @GetMapping("/create")
+    public String showCreateForm(){
+        return  "animal.create";
+    }
     /**
      * Get a list of all Animal in the database.
      * http://localhost:8080/Animals/all
@@ -19,8 +25,11 @@ public class AnimalsController {
      * @return a list of Animal  objects.
      */
     @GetMapping("/all")
-    public List<Animal> getAllAnimals() {
-        return service.getAllAnimals();
+    public String getAllAnimals(Model model) {
+        //return service.getAllAnimals();
+        model.addAttribute("animalList", service.getAllAnimals());
+        model.addAttribute("title","All Animals");
+        return "animal-List";
     }
 
     /**
@@ -54,9 +63,13 @@ public class AnimalsController {
      * @return One animal object.
      */
     @GetMapping("/{animalId}")
-    public Animal getOneAnimal(@PathVariable int animalId) {
-        return service.getAnimalById(animalId);
+    public String getOneAnimal(@PathVariable int animalId, Model model) {
+        model.addAttribute("animal", service.getAnimalById(animalId));
+        model.addAttribute("title",animalId);
+        return "animal-details" ;
+
     }
+
 
     /**
      * Create a new Student entry.
@@ -66,9 +79,9 @@ public class AnimalsController {
      * @return the updated list of Animal.
      */
     @PostMapping("/new")
-    public List<Animal> addNewAnimal(@RequestBody Animal animal) {
+    public String addNewAnimal(@RequestBody Animal animal) {
         service.addNewAnimal(animal);
-        return service.getAllAnimals();
+        return "redirect:/students/all";
     }
 
     /**
@@ -76,26 +89,38 @@ public class AnimalsController {
      * http://localhost:8080/animals/update/2 --data '{ "AnimalId": 4, "name": "fox", "scientificName": "fox", "species": "fox","habitat": "woods", "description": ""}'
      *
      * @param animalId the unique Student Id.
-     * @param animal   the new update Animal details.
+     *
      * @return the updated Animal object.
      */
-    @PutMapping("/update/{studentId}")
-    public Animal updateAnimal(@PathVariable int animalId, @RequestBody Animal animal) {
-        service.updateAnimal(animalId, animal);
-        return service.getAnimalById(animalId);
+    @GetMapping("/update/{studentId}")
+    public String showUpdateForm(@PathVariable int animalId, Model model) {
+        model.addAttribute("student",service.getAnimalById(animalId));
+        return "animal-update";
     }
 
     /**
-     * Delete a Student object.
+     * Perform the update.
+     * @param animal
+     * @return
+     */
+    @PostMapping("/update")
+    public String updateStudent(Animal animal) {
+        service.addNewAnimal(animal);
+        return "redirect:/animals/" + animal.getAnimalId();
+    }
+
+
+    /**
+     * Delete a animal object.
      * http://localhost:8080/animals/delete/2
      *
      * @param animalId the unique Animal Id.
      * @return the updated list of Animal.
      */
-    @DeleteMapping("/delete/{animalId}")
-    public List<Animal> deleteStudentById(@PathVariable int animalId) {
+    @GetMapping("/delete/{animalId}")
+    public String deleteStudentById(@PathVariable int animalId) {
         service.deleteAnimalById(animalId);
-        return service.getAllAnimals();
+        return "redirect:/animals/all";
     }
 
 }

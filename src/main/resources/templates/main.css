@@ -1,0 +1,44 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #f2f6e9;
+}
+h1{
+    font-family: luciada Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.banner{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+
+}
+.center{
+    text-align: center;
+}
+.indexText2{
+    padding: 10px;
+    list-style-type:decimal;
+    background-color:#f2f6e9;
+    width: 25%;
+    /*Centers the list*/
+    margin: 0 auto;
+}
+.navbar {
+
+    background:#6ab446;
+}
+.nav-link,
+.navbar-brand {
+    color: #fff;
+    cursor: pointer;
+}
+.nav-link {
+    margin-right: 1em !important;
+}
+.nav-link:hover {
+    color: #000;
+}
+.navbar-collapse {
+    justify-content: flex-end;
+}
